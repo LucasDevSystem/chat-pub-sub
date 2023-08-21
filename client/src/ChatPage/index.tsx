@@ -25,14 +25,14 @@ const channels = [
   },
 ];
 
-interface Message {
+export interface Message {
   channelId: number;
   senderId: number;
   senderName: string;
   message: string;
 }
 
-interface Channel {
+export interface Channel {
   id: number;
   title: string;
   img_url: string;
@@ -44,17 +44,17 @@ const MessagesPage = () => {
   const [activeChannel, setActiveChannel] = React.useState<Channel>();
   const [messages, setMessages] = React.useState<Message[]>();
   const [subscriptionActive, setSubscriptionActive] = React.useState(true);
-  const [userId, setUserId] = React.useState(1);
+  const [userId, setUserId] = React.useState('1');
 
   const handleSelect = (channelId: number) => {
     const channel: Channel | undefined = channels.find(
       (ch) => ch.id === channelId
     );
-    console.log(channel);
 
     if (!channel) return;
 
     setActiveChannel(channel);
+    setMessages([]);
   };
 
   // publicador
@@ -94,11 +94,12 @@ const MessagesPage = () => {
   return (
     <div>
       <Container fixed>
-        <label>Usuario</label>
+        <label>ID do Usuario </label>
         <input onChange={(e: any) => setUserId(e.target.value)}></input>
         <Box sx={styles.box}>
           <InboxList
             onSelect={handleSelect}
+            userId={userId}
             recentMessages={channels}
             activeChannel={activeChannel}
           />
@@ -118,10 +119,3 @@ const MessagesPage = () => {
 
 export default MessagesPage;
 
-const getMessagesByUser = (data: Array<any>, activeMessage: string) => {
-  const filtered = data.filter((user) => user.userName === activeMessage);
-  if (!filtered.length) {
-    return [];
-  }
-  return filtered[0].messages;
-};

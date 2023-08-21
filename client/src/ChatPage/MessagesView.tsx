@@ -12,19 +12,28 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import styles from "./styles";
+import { Channel, Message } from ".";
 const MessageCard = Card;
-const senderId = 1;
-const MessagesView = ({ messages, onSend, userId , activeChannel}: any) => {
-  const handleSend = () => {};
 
-  return (
-    <MessageCard sx={styles.messageCard}>
-      <MessageHeader title={activeChannel?.title} />
-      <MessageContent userId={userId} messages={messages} />
-      <MessageInput onSend={onSend} />
-    </MessageCard>
-  );
-};
+interface MessagesViewProps {
+  messages: Message[] | undefined;
+  userId: string;
+  activeChannel: Channel | undefined;
+  onSend: (msg: string) => void;
+}
+
+const MessagesView = ({
+  messages,
+  onSend,
+  userId,
+  activeChannel,
+}: MessagesViewProps) => (
+  <MessageCard sx={styles.messageCard}>
+    <MessageHeader title={activeChannel?.title} />
+    <MessageContent userId={userId} messages={messages} />
+    <MessageInput onSend={onSend} />
+  </MessageCard>
+);
 
 export default MessagesView;
 
@@ -38,10 +47,10 @@ const MessageHeader = ({ title }: any) => (
 const MessageContent = ({ messages = [], userId }: any) => (
   <List style={styles.messageContent}>
     <CardContent>
-      {messages.map((msg: any, index: any) => (
+      {messages.map((msg: any, index: number) => (
         <InternalText
           key={index + userId}
-          isSentByViewer={isSentByViewer(msg, userId)}
+          isSentByViewer={isSentByViewer(msg, userId || "lucas")}
           data={msg}
         />
       ))}

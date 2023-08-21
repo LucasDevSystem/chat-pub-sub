@@ -7,10 +7,10 @@ import Avatar from "@mui/material/Avatar";
 import { Card, CardHeader, Divider } from "@mui/material";
 import styles from "./styles";
 
-const InboxList = ({ recentMessages, onSelect, activeChannel }: any) => {
+const InboxList = ({ recentMessages, onSelect, activeChannel, userId }: any) => {
   return (
     <Card sx={styles.inboxContainner}>
-      <CardHeader title="Lucas" />
+      <CardHeader title={userId || "lucas"} />
       <Divider></Divider>
       <List sx={styles.inboxContent}>
         {recentMessages.map(({ img_url, title, id }: any) => (
@@ -25,7 +25,7 @@ const InboxList = ({ recentMessages, onSelect, activeChannel }: any) => {
               <ListItemAvatar>
                 <Avatar src={img_url}></Avatar>
               </ListItemAvatar>
-              <ListItemText primary={title} secondary="Ago 10, 2023" />
+              <ListItemText primary={title} secondary="21 Ago, 2023" />
             </ListItem>
             <Divider variant="middle" />
           </div>

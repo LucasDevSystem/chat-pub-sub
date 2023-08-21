@@ -34,6 +34,7 @@ app.post("/publish/:channelId", async (req, res) => {
     res.status(500).send("Error sending message to RabbitMQ");
   }
 });
+
 /*
  rota subscribe
 

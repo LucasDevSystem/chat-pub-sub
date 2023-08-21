@@ -9,13 +9,7 @@ import InboxList from "./InboxList";
 
 const currentUserName = "jose";
 
-interface Channel {
-  id: number;
-  title: string;
-  img_url: string;
-}
-
-// canais 
+// canais
 const channels = [
   {
     id: 1,
@@ -31,11 +25,24 @@ const channels = [
   },
 ];
 
+interface Message {
+  channelId: number;
+  senderId: number;
+  senderName: string;
+  message: string;
+}
+
+interface Channel {
+  id: number;
+  title: string;
+  img_url: string;
+}
+
 const ENDPOINT_BASE_URL = `http://localhost:3003`;
 
 const MessagesPage = () => {
   const [activeChannel, setActiveChannel] = React.useState<Channel>();
-  const [messages, setMessages] = React.useState<Array<any>>([]);
+  const [messages, setMessages] = React.useState<Message[]>();
   const [subscriptionActive, setSubscriptionActive] = React.useState(true);
   const [userId, setUserId] = React.useState(1);
 
@@ -75,7 +82,7 @@ const MessagesPage = () => {
 
       eventSource.addEventListener("message", (event) => {
         const newMessage = JSON.parse(JSON.parse(event.data));
-        setMessages((prevMessages) => [...prevMessages, newMessage]);
+        setMessages((prevMessages) => [...(prevMessages || []), newMessage]);
       });
 
       return () => {

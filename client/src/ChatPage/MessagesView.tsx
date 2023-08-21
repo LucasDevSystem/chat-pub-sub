@@ -73,7 +73,7 @@ const InternalText = ({ isSentByViewer, data }: any) => (
             fontWeight: "bold",
           }}
         >
-          {data.senderName}
+          {data.senderId}
         </Typography>
       )}
       <Typography>{data.message}</Typography>

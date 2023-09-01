@@ -1,3 +1,10 @@
+
+/*
+
+Chat pub sub broker.
+
+*/
+
 const express = require("express");
 const cors = require("cors");
 const amqp = require("amqplib");
@@ -25,13 +32,14 @@ app.post("/publish/:channelId", async (req, res) => {
     const connection = await amqp.connect(RABBIT_CONN_URL);
     const channel = await connection.createChannel();
     const exchange = `channel_${channelId}`;
-
+    // exchange do tipo fanout envia uma copia para todas as filas com mesmo exchange id
     await channel.assertExchange(exchange, "fanout", { durable: false });
     channel.publish(exchange, "", Buffer.from(JSON.stringify(data)));
-    res.send("Message sent to RabbitMQ");
+    
+    res.send("menssagem enviada para fila");
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).send("Error sending message to RabbitMQ");
+    res.status(500).send("erro");
   }
 });
 
@@ -55,7 +63,7 @@ app.get("/subscribe/:channelId", async (req, res) => {
     const channel = await connection.createChannel();
     const exchange = `channel_${channelId}`;
     await channel.assertExchange(exchange, "fanout", { durable: false });
-
+    // fila exclusiva
     const { queue } = await channel.assertQueue("", { exclusive: true });
     channel.bindQueue(queue, exchange, "");
 
@@ -67,7 +75,6 @@ app.get("/subscribe/:channelId", async (req, res) => {
     const keepAliveInterval = setInterval(() => {
       res.write(": keep-alive\n\n");
     }, 30000);
-
     // fica escutando a fila do rabbitMQ
     channel.consume(
       queue,

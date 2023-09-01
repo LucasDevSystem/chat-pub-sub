@@ -100,7 +100,7 @@ const MessagesPage = () => {
           <InboxList
             onSelect={handleSelect}
             userId={userId}
-            recentMessages={channels}
+            channels={channels}
             activeChannel={activeChannel}
           />
           <div style={styles.messageContainner}>
